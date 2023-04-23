@@ -1,9 +1,17 @@
 import { Injectable } from '@angular/core';
+import {Shoe} from "../model/shoe";
+import {HttpClient} from "@angular/common/http";
+import {map, Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
 
-  constructor() { }
+  constructor(private http: HttpClient, ) { }
+
+  getShoes() : Observable<Shoe[]> {
+    return this.http.get<any[]>('http://localhost:3000/products/').pipe(
+       map(data => data.map( product => new Shoe(product["_id"], product["name"], product["price"], product["type"]))))
+  }
 }
