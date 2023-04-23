@@ -1,0 +1,30 @@
+<div fxLayoutAlign="center center" fxLayout="column" style="height: 100vh;">
+  <h1>Add Product</h1>
+  <form [formGroup]="addProductForm" fxLayout="column" fxLayoutAlign="center center" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Product Name</mat-label>
+      <input matInput type="text" id="name" formControlName="name" required>
+      <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+        <div *ngIf="name.errors?.['required']">Product name is required</div>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-form-field>
+        <mat-label>Product Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let type of productTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Price</mat-label>
+      <input matInput type="number" id="price" formControlName="price" required>
+      <mat-error *ngIf="price.invalid && (price.dirty || price.touched)">
+        <div *ngIf="price.errors?.['required']">Price is required</div>
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!addProductForm.valid">
+      Add Product
+    </button>
+  </form>
+</div>
