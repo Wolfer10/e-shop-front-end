@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Shoe} from "../../model/shoe";
 import {MatTableDataSource} from "@angular/material/table";
 import {ProductsService} from "../../products/products.service";
@@ -9,7 +9,7 @@ import {AdminModule} from "../admin.module";
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'type', 'price'];
   dataSource: MatTableDataSource<Shoe> = new MatTableDataSource();
