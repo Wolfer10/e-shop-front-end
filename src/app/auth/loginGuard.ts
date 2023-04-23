@@ -2,7 +2,7 @@ import {ActivatedRouteSnapshot, CanActivateChildFn, CanActivateFn, Router, Route
 import {inject} from "@angular/core";
 import {AuthService} from "./auth.service";
 
-export const authGuard: (next: ActivatedRouteSnapshot, state: RouterStateSnapshot) => void = (
+export const loginGuard: (next: ActivatedRouteSnapshot, state: RouterStateSnapshot) => void = (
   next: ActivatedRouteSnapshot,
   state: RouterStateSnapshot) => {
   const authService = inject(AuthService);
@@ -13,5 +13,20 @@ export const authGuard: (next: ActivatedRouteSnapshot, state: RouterStateSnapsho
   }
   return router.parseUrl('/login');
 }
+
+export const adminGuard: (next: ActivatedRouteSnapshot, state: RouterStateSnapshot) => void = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  if (authService.isAdmin) {
+    return true;
+  }
+
+  return router.parseUrl('forbidden');
+}
+
+
 
 

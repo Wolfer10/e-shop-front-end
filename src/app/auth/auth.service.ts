@@ -29,6 +29,10 @@ export class AuthService {
     return localStorage.getItem('user') !== null;
   }
 
+  public get isAdmin(): boolean {
+    return localStorage.getItem('accessLevel') === null ? false : Number.parseInt(localStorage.getItem('accessLevel')!) === 3;
+  }
+
   logout() {
     this.http.post(this.logoutUrl, {});
     localStorage.removeItem('user');
