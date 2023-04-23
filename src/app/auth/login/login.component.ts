@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
       this.authService.login({username, password}).subscribe({
-        next: next => {this.router.navigate(['/products']);},
+        next: () => {this.router.navigate(['/products']);},
         error: err => this.errorMessage = err
       });
     }

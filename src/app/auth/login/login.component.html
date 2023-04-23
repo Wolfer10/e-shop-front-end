@@ -1,24 +1,24 @@
+<div fxLayoutAlign="center center" fxLayout="column" style="height: 100vh;">
 <h1>Login</h1>
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="username">username</label>
-    <input type="text" id="username" formControlName="username" name="username" required >
-    <div *ngIf="username.invalid && (username.dirty || username.touched)">
-      <div *ngIf="username.errors">Username is required</div>
-      <div *ngIf="username.errors?.['required']">Invalid username format</div>
-    </div>
-  </div>
-  <div>
-    <label for="password">Password</label>
-    <input type="password" id="password" formControlName="password">
-    <div *ngIf="password.invalid && (password.dirty || password.touched)">
+<form [formGroup]="loginForm" fxLayout="column" fxLayoutAlign="center center" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input matInput type="text" id="username" formControlName="username" required>
+    <mat-error *ngIf="username.invalid && (username.dirty || username.touched)">
+      <div *ngIf="username.errors?.['required']">Username is required</div>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput type="password" id="password" formControlName="password" required>
+    <mat-error *ngIf="password.invalid && (password.dirty || password.touched)">
       <div *ngIf="password.errors?.['required']">Password is required</div>
-    </div>
-  </div>
+    </mat-error>
+  </mat-form-field>
+  <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
 
-  <button type="submit" [disabled]="!loginForm.valid">
+  <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">
     Login
   </button>
-  <div *ngIf="errorMessage" > {{errorMessage}} </div>
 </form>
-
+</div>
