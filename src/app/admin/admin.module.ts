@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminComponent } from './admin/admin.component';
-
+import { MatTableModule } from '@angular/material/table';
 
 
 @NgModule({
@@ -9,7 +9,8 @@ import { AdminComponent } from './admin/admin.component';
     AdminComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatTableModule,
   ]
 })
 export class AdminModule { }

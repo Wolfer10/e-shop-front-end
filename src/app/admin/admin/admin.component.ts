@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import {Shoe} from "../../model/shoe";
+import {MatTableDataSource} from "@angular/material/table";
+import {ProductsService} from "../../products/products.service";
+import {AdminModule} from "../admin.module";
 
 @Component({
   selector: 'app-admin',
@@ -6,5 +10,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent {
+
+  displayedColumns: string[] = ['id', 'name', 'type', 'price'];
+  dataSource: MatTableDataSource<Shoe> = new MatTableDataSource();
+  constructor(private productService: ProductsService) {}
+  ngOnInit() {
+    this.productService.getShoes().subscribe(shoes => {
+      this.dataSource = new MatTableDataSource(shoes);
+    });
+
+  }
 
 }
