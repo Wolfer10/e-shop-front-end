@@ -18,7 +18,7 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
   imports: [
     CommonModule,
     MatCardModule,
-    MatGridListModule
+    MatGridListModule,
   ],
 
 

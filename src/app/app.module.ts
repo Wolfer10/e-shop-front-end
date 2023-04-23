@@ -17,12 +17,15 @@ import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {NavButtonModule} from "./shared/nav-button/nav-button.module";
 import {HeaderModule} from "./shared/header/header.module";
+import { ForbiddenComponent } from './forbidden/forbidden.component';
+import {AddProductPageModule} from "./products/add-product-page/add-product-page.module";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     PageNotFoundComponent,
+    ForbiddenComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,8 @@ import {HeaderModule} from "./shared/header/header.module";
     MatGridListModule,
     MatIconModule,
     NavButtonModule,
-    HeaderModule
+    HeaderModule,
+    AddProductPageModule
   ],
   providers: [],
   bootstrap: [AppComponent]
