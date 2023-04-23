@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
-import {BehaviorSubject, catchError, map, Observable, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, map, Observable, Subject, throwError} from 'rxjs';
+import {User} from '../model/user';
 
 @Injectable({
   providedIn: 'root'
@@ -8,56 +9,84 @@ import {BehaviorSubject, catchError, map, Observable, throwError} from 'rxjs';
 export class AuthService {
 
   private loginUrl = 'http://localhost:3000/login';
-  private registerUrl = 'http://localhost:3000/register';
+  private logoutUrl = 'http://localhost:3000/logout';
+  private usersUrl = 'http://localhost:3000/users/';
+  private userNameUrl = 'http://localhost:3000/users/name';
 
 
-  private currentUserSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+   user = new BehaviorSubject<String | null>(localStorage.getItem('user'));
 
-  constructor(private http: HttpClient) {
 
+  constructor(private http: HttpClient) {}
+
+  public register(user: User) : Observable<any> {
+    return this.http.post(this.usersUrl, user).pipe(
+      this.getCatchError.call(this, this.handleErrorMessage)
+    )
   }
 
-  public get currentUserValue(): any {
-    return this.currentUserSubject.value;
+  public get isLoggedIn(): boolean {
+    return localStorage.getItem('user') !== null;
   }
 
   logout() {
-    // Remove the user object from the BehaviorSubject
-    this.currentUserSubject.next(null);
+    this.http.post(this.logoutUrl, {});
+    localStorage.removeItem('user');
+    this.user.next(null);
   }
 
-  isAuthenticated(): boolean {
-    // Check if the user object in the BehaviorSubject exists
-    return !!this.currentUserSubject.value;
+  private getCatchError(handleErrorMessage: Function) {
+    return catchError(error => {
+      console.error('Error in login request:', error);
+      let errorMsg: string = '';
+      if (error.error instanceof ErrorEvent) {
+        errorMsg = `Error: ${error.error.message}`;
+      } else {
+        errorMsg = handleErrorMessage(error);
+      }
+      return throwError(() => errorMsg);
+    });
   }
 
   login(credentials: { username: string, password: string }): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'responseType': 'text'
     });
+
     return this.http.post(this.loginUrl, JSON.stringify({username : credentials.username, password : credentials.password}), {headers}).pipe(
-      catchError(error => {
-        let errorMsg: string = '';
-        if (error.error instanceof ErrorEvent) {
-          errorMsg = `Error: ${error.error.message}`;
-        } else {
-          errorMsg = this.getServerErrorMessage(error);
-        }
-        return throwError(() => errorMsg);
-      }),
-      map(user => {
-        // If login is successful, save the user object to the BehaviorSubject
-        this.currentUserSubject.next(user);
-        return user;
+      this.getCatchError.call(this, this.handleErrorMessage),
+      map(any => {
+        localStorage.setItem('user', credentials.username);
+        this.user.next(credentials.username);
+        let user: User;
+        this.getUserByName(credentials.username).subscribe(value => {
+            user = value
+            localStorage.setItem('accessLevel', String(user.accessLevel));
+          }
+        )
       })
     );
   }
 
+  private getUserByName(userName: String) : Observable<User> {
+    return this.http.post<object>(this.userNameUrl, {name: userName} ).pipe(
+      this.getCatchError.call(this, this.handleErrorMessage),
+      map(data => { // @ts-ignore
+        // @ts-ignore
+        return {username: data['username'] as String, password: data['password'] as String,
+          // @ts-ignore
+        accessLevel: data['accessLevel'] as Number,
+          // @ts-ignore
+        birthdate: data['birthDate'] as Date} as User})
+    )
+  }
 
-  private getServerErrorMessage(error: HttpErrorResponse): string {
+
+  private handleErrorMessage(error: HttpErrorResponse): string {
     switch (error.status) {
       case 401:
-        return 'Hibás felhasználónév vagy jelszó';
+        return 'Wrong credentials!';
       case 404: {
         return `Not Found: ${error.message}`;
       }
@@ -74,6 +103,4 @@ export class AuthService {
 
     }
   }
-
-
 }
