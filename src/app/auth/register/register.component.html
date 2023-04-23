@@ -1,1 +1,36 @@
-<p>register works!</p>
+<div fxLayoutAlign="center center" fxLayout="column" style="height: 100vh;">
+  <h1>Register</h1>
+  <form [formGroup]="registerForm" fxLayout="column" fxLayoutAlign="center center" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input matInput type="text" id="username" formControlName="username" name="username" required>
+      <mat-error *ngIf="username.invalid && (username.dirty || username.touched)">
+        <span *ngIf="username.errors?.['required']">Username is required</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input matInput type="password" id="password" formControlName="password" required>
+      <mat-error *ngIf="password.invalid && (password.dirty || password.touched)">
+        <span *ngIf="password.errors?.['required']">Password is required</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password Confirmation</mat-label>
+      <input matInput type="password" id="passwordConfirmation" formControlName="passwordConfirmation" required>
+      <mat-error *ngIf="passwordConfirmation.invalid && (passwordConfirmation.dirty || passwordConfirmation.touched)">
+        <span *ngIf="passwordConfirmation.errors?.['required']">Password Confirmation is required</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Birth date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="birthDate" (dateChange)="changeDatePicker()">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <button id="submit-button" mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">Register</button>
+    <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+  </form>
+</div>
+
+
