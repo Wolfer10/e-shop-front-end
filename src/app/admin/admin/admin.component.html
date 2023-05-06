@@ -21,11 +21,22 @@
   <!-- Price Column -->
   <ng-container matColumnDef="price">
     <th mat-header-cell *matHeaderCellDef>Price</th>
-    <td mat-cell *matCellDef="let shoe">{{ shoe.price}}</td>
+    <td mat-cell *matCellDef="let shoe">{{ shoe.priceWithCurrency}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let shoe">
+      <button mat-icon-button color="warn" (click)="deleteShoe(shoe.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let shoe; columns: displayedColumns;"></tr>
+
+
 </table>
 
 <app-add-product-button></app-add-product-button>
