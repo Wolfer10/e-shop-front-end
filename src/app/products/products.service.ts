@@ -25,4 +25,8 @@ export class ProductsService {
     return this.http.post<any>('http://localhost:3000/products/', {...product});
   }
 
+  deleteProduct(productId: String) : Observable<void> {
+    return this.http.delete<any>(`http://localhost:3000/products/${productId}`, {});
+  }
+
 }
