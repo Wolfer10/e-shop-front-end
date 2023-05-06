@@ -19,6 +19,7 @@ import {NavButtonModule} from "./shared/nav-button/nav-button.module";
 import {HeaderModule} from "./shared/header/header.module";
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import {AddProductPageModule} from "./products/add-product-page/add-product-page.module";
+import {ProfilModule} from "./profil/profil.module";
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import {AddProductPageModule} from "./products/add-product-page/add-product-page
     MatIconModule,
     NavButtonModule,
     HeaderModule,
-    AddProductPageModule
+    AddProductPageModule,
+    ProfilModule
   ],
   providers: [],
   bootstrap: [AppComponent]

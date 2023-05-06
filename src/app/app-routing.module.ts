@@ -9,6 +9,7 @@ import {adminGuard, loginGuard} from "./auth/loginGuard";
 import {AdminComponent} from "./admin/admin/admin.component";
 import {AddProductPageComponent} from "./products/add-product-page/add-product-page.component";
 import {ForbiddenComponent} from "./forbidden/forbidden.component";
+import {ProfilComponent} from "./profil/profil.component";
 
 const routes: Routes = [
   { path: '', redirectTo:'login', pathMatch: 'full'},
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'products', component: ProductListComponent, canActivate: [loginGuard],},
   { path: 'products/:id', component: ProductDetailComponent, canActivate: [loginGuard],},
   { path: 'add-product', component: AddProductPageComponent, canActivate: [loginGuard],},
+  { path: 'profil', component: ProfilComponent, canActivate: [loginGuard],},
   { path: 'forbidden', component: ForbiddenComponent, pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent, pathMatch: 'full' },
 ];

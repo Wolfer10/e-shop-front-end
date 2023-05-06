@@ -2,6 +2,7 @@
   <span>E-Shop</span>
   <div class="spacer"></div>
   <app-nav-button [buttonName]="'Home'" [route]="'products'"></app-nav-button>
-  <app-nav-button [buttonName]="'Logout'" [route]="'login'"></app-nav-button>
+  <app-nav-button [buttonName]="'Profile'" [route]="'profil'"></app-nav-button>
   <app-nav-button [buttonName]="'Admin'" [route]="'admin'" [isHidden]="Number.parseInt(localStorage.getItem('accessLevel')!) !== 3"></app-nav-button>
+  <app-nav-button [buttonName]="'Logout'" [route]="'login'"></app-nav-button>
 </mat-toolbar>

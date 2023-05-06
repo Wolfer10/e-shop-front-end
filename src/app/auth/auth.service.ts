@@ -73,7 +73,7 @@ export class AuthService {
     );
   }
 
-  private getUserByName(userName: String) : Observable<User> {
+  public getUserByName(userName: String) : Observable<User> {
     return this.http.post<object>(this.userNameUrl, {name: userName} ).pipe(
       this.getCatchError.call(this, this.handleErrorMessage),
       map(data => { // @ts-ignore
@@ -82,7 +82,7 @@ export class AuthService {
           // @ts-ignore
         accessLevel: data['accessLevel'] as Number,
           // @ts-ignore
-        birthdate: data['birthDate'] as Date} as User})
+        birthdate: data['birthdate'] as Date} as User})
     )
   }
 
