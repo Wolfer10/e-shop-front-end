@@ -2,7 +2,11 @@ import {Product} from "./product";
 
 export class Shoe implements Product{
 
-  constructor(private _id: String, private _name: String, private _price: Number, private _type: String) {
+  constructor(private _id: String,
+              private _name: String,
+              private _price: Number,
+              private _type: String,
+              private _priceWithCurrency: String) {
   }
 
   get id(): String{
@@ -18,6 +22,10 @@ export class Shoe implements Product{
   }
   get type(): String{
     return this._type;
+  }
+
+  get priceWithCurrency() : String{
+    return this._priceWithCurrency;
   }
 
 

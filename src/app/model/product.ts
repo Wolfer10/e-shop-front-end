@@ -3,4 +3,5 @@ export interface Product {
   name: String;
   price: Number;
   type: String;
+  priceWithCurrency: String;
 }

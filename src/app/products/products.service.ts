@@ -13,7 +13,12 @@ export class ProductsService {
 
   getShoes() : Observable<Shoe[]> {
     return this.http.get<any[]>('http://localhost:3000/products/').pipe(
-       map(data => data.map( product => new Shoe(product["_id"], product["name"], product["price"], product["type"]))))
+       map(data => data.map( product => new Shoe(product["_id"],
+         product["name"],
+         product["price"],
+         product["type"],
+         product["priceWithCurrency"]
+         ))))
   }
 
   addProduct(product: Product) : Observable<Product> {

@@ -9,7 +9,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.css']
 })
-export class ProductDetailComponent {
+export class ProductDetailComponent implements OnInit {
 
 
   product: Product = {
@@ -17,6 +17,7 @@ export class ProductDetailComponent {
     name: '',
     price: 0,
     type: '',
+    priceWithCurrency: ''
   }
   constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
   }
@@ -27,7 +28,7 @@ export class ProductDetailComponent {
 
   fetchProduct() {
     this.http.get<any>(`http://localhost:3000/products/${this.route.snapshot.params['id']}`).subscribe(data => {
-      this.product = new Shoe(data["_id"], data["name"], data["price"], data["type"]);
+      this.product = new Shoe(data["_id"], data["name"], data["price"], data["type"], data["priceWithCurrency"]);
     })
   }
 
