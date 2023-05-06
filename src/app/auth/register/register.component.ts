@@ -1,9 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
+import { Component } from '@angular/core';
+import {
+  AbstractControl, AsyncValidatorFn,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from "@angular/forms";
 import {AuthService} from "../auth.service";
 import {Router} from "@angular/router";
 import {User} from '../../model/user';
 import * as moment from 'moment';
+import {map, Observable, of} from "rxjs";
 
 
 @Component({
@@ -29,18 +38,56 @@ export class RegisterComponent {
     return parsedDate.isValid() ? null : { invalidDate: true };
   }
 
+
   ngOnInit() {
     this.registerForm = new FormGroup({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
-      passwordConfirmation: new FormControl('', Validators.required),
+      passwordConfirmation: new FormControl('', [Validators.required]),
       birthDate: new FormControl('',  [Validators.required, this.isValidDate])
-    });
+    },  [this.MatchValidator('passwordConfirmation', 'password'),]
+    );
   }
+
+   MatchValidator(source: string, target: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const sourceCtrl = control.get(source);
+      const targetCtrl = control.get(target);
+      return sourceCtrl && targetCtrl && sourceCtrl.value !== targetCtrl.value
+        ? { mismatch: true }
+        : null;
+    };
+  }
+
+  UsernameValidator(source: string, authService: AuthService): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      const usernameCtrl = control.get(source);
+      if (!usernameCtrl || !usernameCtrl.value) {
+        return of(null);
+      }
+      console.log("Hali")
+      return authService.getUserByName(usernameCtrl.value).pipe(
+        map(user => {
+          console.log(user)
+          return user ? { usernameTaken: true } : null;
+        })
+      );
+    }
+  }
+
+  get passwordMatchError() {
+    return this.registerForm.getError('mismatch');
+  }
+
+  get userNameAlreadyInUse() {
+    return this.registerForm.getError('alreadyInUse');
+  }
+
 
   changeDatePicker(): any {
     this.registerForm.value.expireDate = moment(this.registerForm.value.expireDate).format('YYYY-MM-DD');
   }
+
 
   get username() {
     return this.registerForm.get('username')!;

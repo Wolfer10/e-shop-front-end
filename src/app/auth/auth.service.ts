@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
-import {BehaviorSubject, catchError, map, Observable, Subject, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, map, Observable, of, Subject, throwError} from 'rxjs';
 import {User} from '../model/user';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class AuthService {
 
   private loginUrl = 'http://localhost:3000/login';
   private logoutUrl = 'http://localhost:3000/logout';
-  private usersUrl = 'http://localhost:3000/users/';
+  private usersUrl = 'http://localhost:3000/register/';
   private userNameUrl = 'http://localhost:3000/users/name';
 
 
@@ -74,21 +74,32 @@ export class AuthService {
   }
 
   public getUserByName(userName: String) : Observable<User> {
+    console.log("Getting user by name: ", userName);
+
     return this.http.post<object>(this.userNameUrl, {name: userName} ).pipe(
-      this.getCatchError.call(this, this.handleErrorMessage),
-      map(data => { // @ts-ignore
+      catchError((error: any) => {
+        console.log("Error:", error);
+        if (error instanceof HttpErrorResponse && error.status === 404) {
+          return of(null);
+        } else {
+          return throwError(error);
+        }
+      }),
+      map(data => {
         // @ts-ignore
         return {username: data['username'] as String, password: data['password'] as String,
           // @ts-ignore
-        accessLevel: data['accessLevel'] as Number,
+          accessLevel: data['accessLevel'] as Number,
           // @ts-ignore
-        birthdate: data['birthdate'] as Date} as User})
+          birthdate: data['birthdate'] as Date} as User})
     )
   }
 
 
   private handleErrorMessage(error: HttpErrorResponse): string {
     switch (error.status) {
+      case 400:
+        return 'Username already taken'
       case 401:
         return 'Wrong credentials!';
       case 404: {
@@ -104,7 +115,9 @@ export class AuthService {
         console.log(error)
         return `Unknown Server Error: ${error.message}`;
       }
-
     }
   }
+
+
+
 }

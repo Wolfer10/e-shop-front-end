@@ -8,6 +8,9 @@
         <span *ngIf="username.errors?.['required']">Username is required</span>
       </mat-error>
     </mat-form-field>
+    <mat-error *ngIf="userNameAlreadyInUse">
+      <span> Username already in use</span>
+    </mat-error>
     <mat-form-field>
       <mat-label>Password</mat-label>
       <input matInput type="password" id="password" formControlName="password" required>
@@ -22,9 +25,12 @@
         <span *ngIf="passwordConfirmation.errors?.['required']">Password Confirmation is required</span>
       </mat-error>
     </mat-form-field>
+    <mat-error *ngIf="passwordMatchError">
+      <span> Password doesnt match with confirmation password</span>
+    </mat-error>
     <mat-form-field>
       <mat-label>Birth date</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="birthDate" (dateChange)="changeDatePicker()">
+      <input matInput [matDatepicker]="picker" formControlName="birthDate" (dateChange)="changeDatePicker()" required>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
